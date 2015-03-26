@@ -1,0 +1,587 @@
+<html>
+<meta charset="utf-8">
+<style>
+
+  .d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+.bar:hover {
+  fill: orangered ;
+}
+
+
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.legend text {
+  font: 12px sans-serif;
+}
+
+
+</style>
+<body>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script>
+
+var tempData=[{"merchant":"M1",
+			   "values":[{"type":"Credit Card","values":[//{"segm":"VHNW","count": 10},
+																	 //{"segm":"UHNW","count": 70},
+																	 {"segm":"SHNW","count": 20},
+																	 {"segm":"HNW","count": 10}]},
+			   
+			   
+			   
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 70},
+																	 //{"segm":"UHNW","count": 20},
+																	 //{"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 10}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 50},
+																	 {"segm":"UHNW","count": 20},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 100}]}]
+						
+				},{"merchant":"M2",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 15},
+																	 {"segm":"UHNW","count": 35},
+																	 {"segm":"SHNW","count": 10},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 110},
+																	 //{"segm":"UHNW","count": 80},
+																	 {"segm":"SHNW","count": 90},
+																	 {"segm":"HNW","count": 140}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 5},
+																	 {"segm":"UHNW","count": 35},
+																	 {"segm":"SHNW","count": 75},
+																	 {"segm":"HNW","count": 65}]}]
+				},{"merchant":"M3",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 15},
+																	 {"segm":"UHNW","count": 35},
+																	 {"segm":"SHNW","count": 10},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 110},
+																	 {"segm":"UHNW","count": 80},
+																	 //{"segm":"SHNW","count": 90},
+																	 {"segm":"HNW","count": 140}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 5},
+																	 {"segm":"UHNW","count": 35},
+																	 {"segm":"SHNW","count": 75},
+																	 {"segm":"HNW","count": 65}]}]
+				},{"merchant":"M4",
+			   "values":[{"type":"Credit Card","values":[//{"segm":"VHNW","count": 150},
+																	// {"segm":"UHNW","count": 180},
+																	 //{"segm":"SHNW","count": 100},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 120},
+																	 {"segm":"UHNW","count": 150},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 60}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 100},
+																	 {"segm":"UHNW","count": 110},
+																	 {"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 50}]}]
+				},{"merchant":"M5",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 150},
+																	 {"segm":"UHNW","count": 180},
+																	 {"segm":"SHNW","count": 100},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 120},
+																	 {"segm":"UHNW","count": 150},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 60}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 100},
+																	 {"segm":"UHNW","count": 110},
+																	 {"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 50}]}]
+				},{"merchant":"M6",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 150},
+																	 {"segm":"UHNW","count": 180},
+																	 {"segm":"SHNW","count": 100},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 120},
+																	 {"segm":"UHNW","count": 150},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 60}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 100},
+																	 {"segm":"UHNW","count": 110},
+																	 {"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 50}]}]
+				}
+				,{"merchant":"M7",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 150},
+																	 {"segm":"UHNW","count": 180},
+																	 {"segm":"SHNW","count": 100},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 120},
+																	 {"segm":"UHNW","count": 150},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 60}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 100},
+																	 {"segm":"UHNW","count": 110},
+																	 {"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 50}]}]
+				},{"merchant":"M8",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 150},
+																	 {"segm":"UHNW","count": 180},
+																	 {"segm":"SHNW","count": 100},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 120},
+																	 {"segm":"UHNW","count": 150},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 60}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 100},
+																	 {"segm":"UHNW","count": 110},
+																	 {"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 50}]}]
+				},/*{"merchant":"M9",
+			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 150},
+																	 {"segm":"UHNW","count": 180},
+																	 {"segm":"SHNW","count": 100},
+																	 {"segm":"HNW","count": 80}]},
+						{"type":"Debit Card","values":[{"segm":"VHNW","count": 120},
+																	 {"segm":"UHNW","count": 150},
+																	 {"segm":"SHNW","count": 80},
+																	 {"segm":"HNW","count": 60}]},
+						{"type":"Cheque","values":[{"segm":"VHNW","count": 10},
+																	 {"segm":"UHNW","count": 110},
+																	 {"segm":"SHNW","count": 60},
+																	 {"segm":"HNW","count": 50}]
+																	 }]
+				}*/
+			];
+
+
+
+			
+var data = [];        //for storing the final data used for plotting
+var tempSegment=[];   //for storing segment type
+
+returnSegmentArray(tempData);
+
+//For generating final data to to plot the stacked bar chart
+for(i in tempData){
+	var merchant=tempData[i].merchant;
+	var values= tempData[i].values;
+	for(j in values){
+		var temp={};
+		for(x in tempSegment){
+			temp[tempSegment[x]]=0;
+		}
+		temp.merchant = merchant;
+		temp.type=values[j].type;
+		var innerValue = values[j].values;
+		for(k in innerValue){
+			temp[innerValue[k].segm]=innerValue[k].count;
+		}
+		data.push(temp);
+	}
+}
+
+//To create an equal segment array for each json object which will be used in preparing the final data for stacked bar chart
+function returnSegmentArray(tempData){
+for(i in tempData){
+var upperValues = tempData[i].values;
+for(j in upperValues){
+var lowerValues = upperValues[j].values;
+for(k in lowerValues){
+if(!checkPrevious(lowerValues[k].segm,tempSegment)){
+tempSegment.push(lowerValues[k].segm);
+				}
+			}
+		}
+	}
+}
+
+//To check the existing values in array used in returnSegmentArray function
+function checkPrevious(segment,segmentArray){
+	//var flag
+	for(i in segmentArray){
+		if(segmentArray[i] == segment)
+			return true;
+	}
+	return false;
+}
+
+
+//To get distinct merchant to plot x0 domain for group
+var merchant = (function(){
+  var m = {}, newarr = [] , arr = [] , count = 0;
+  for (var i in data)
+	{
+	arr[count++] = data[i].merchant;
+	}
+  for (var i=0; i<arr.length; i++) {
+    var v = arr[i];
+    if (!m[v]) {
+      newarr.push(v);
+      m[v]=true;
+    }
+  }
+  return newarr;
+})();
+
+var merchantCount = merchant.length;
+
+
+//For drawing a virtual bar for tool tip start
+var dataTemp=tempData;
+
+var dat_new_type = [];
+dataTemp.forEach(function(d){
+			val = d.values;
+			d.data_new=[];
+			val.forEach(function(e){
+			var newval=e.values;
+			var sum=0;
+			newval.forEach(function(f){
+					sum = sum + f.count;
+				});
+			e.totalnew = sum;
+			dat_new_type.push(e.type);
+				d.data_new.push({
+							merchant:d.merchant,
+							type:e.type,
+							count:e.totalnew
+							})
+							
+						});
+					}); 
+
+//For drawing a virtual bar for tool tip end
+
+var color = d3.scale.ordinal()
+			  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"])
+			  //.domain(d3.keys(data[0]).filter(function(key) { return (key !== "merchant" && key !== "type" && key !== "total" && key !== "transactiontype" ); }));
+			  .domain(tempSegment);
+
+data.forEach(function(d) {
+var y0 = 0;
+d.transactiontype = color.domain().map(function(name) { return {merchant:d.merchant ,type: d.type ,name: name, y0: y0, y1: y0 += +d[name]}; }); //Calculating the starting and ending
+d.total = d.transactiontype[d.transactiontype.length - 1].y1;	
+});
+
+var maxdata = d3.max(data , function(d) {return d.total; }); //get the maximum value for setting the yaxis domain value
+
+//var valSeg = ['SHNW','HNW','VHNW','UHNW'];
+//var valSeg = d3.keys(data[0]).filter(function(key) { return (key !== "merchant" && key !== "type" && key !== "total" && key !== "type" && key !== "transactiontype" ); })
+
+//color used for Credit card			  
+var colorCredit=d3.scale.ordinal()
+				//.range(['#8B4513','#A26A42','#B98F71','#DCC7B8'])
+				.range(['#DCC7B8','#B98F71','#A26A42','#8B4513'])
+				.domain(tempSegment);
+
+//color used for Debit card
+var colorDebit=d3.scale.ordinal()
+				.range(['#CCD3C1','#AAB597','#778959','#556B2F'])
+				.domain(tempSegment);
+	
+//color used for Cheque
+var colorCheque=d3.scale.ordinal()
+				.range(['#B4ACE6','#6A5ACD','#40367B','#2A2452'])
+				.domain(tempSegment);
+				
+
+				
+function wrap(text, width) {
+	//For counting the number of merchant names on x axis
+	var count= 0 ;  //merchantCount
+	text.each( function(){
+	count++;
+	});
+
+  text.each(function() {
+    if(count > 7 )  //if count is greater than 7 , then it will rotate the x label name to 45 deg
+		var text = d3.select(this).attr("transform","rotate(-45)");
+    else
+		var text = d3.select(this);
+		
+	var	words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1.1, // ems
+        y = text.attr("y"),
+		
+        dy = parseFloat(text.attr("dy"));
+		if(count > 7 ) //if count is greater than 7 , then it will shift the x label name to -10 point towards left
+        var tspan = text.text(null).append("tspan").attr("x", -10).attr("y", y).attr("dy", dy + "em");
+		else
+		var tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * (lineHeight) + dy + "em").text(word);
+      }
+    }
+  });
+}
+
+
+//To get distinct transaction type to plot x1 domain over x0 domain
+var unique = (function(){
+  var m = {}, newarr = [] , arr = [] , count = 0;
+  for (var i in data)
+	{
+	arr[count++] = data[i].type;
+	}
+  for (var i=0; i<arr.length; i++) {
+    var v = arr[i];
+    if (!m[v]) {
+      newarr.push(v);
+      m[v]=true;
+    }
+  }
+   return newarr;
+})();
+
+console.log('unique');console.log(unique);
+
+
+var colorLeg = ['#8B4513','#556B2F','#2A2452'];
+var colorLegend = d3.scale.ordinal().range(colorLeg).domain(unique);
+
+
+
+var margin = {top: 20, right: 30, bottom: 30, left: 40},
+    width = 760 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var y = d3.scale.linear()
+    //.domain([0, d3.max(data, function(d) { return d3.max(d.data_new,function(f) { return f.count; });})])
+	.domain([0, maxdata])
+    .range([height, 0]);
+/*
+var x0 = d3.scale.ordinal()
+    .domain(data.map(function (d) { return d.merchant; }))
+    .rangeBands([0, width], .4);
+*/
+	
+var x0 = d3.scale.ordinal()
+    .domain(merchant)
+    .rangeBands([0, width], .4);
+	
+var x1 = d3.scale.ordinal()
+    .domain(unique)
+    .rangeBands([0, x0.rangeBand()]);
+	
+	
+
+//var z = d3.scale.category20();
+
+var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+
+//Tool tip function
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+		var sum=0;
+		var UHNW=0,VHNW=0,HNW=0,SHNW=0;
+	var merchant = d.merchant;
+	var type = d.type;
+	for(var i=0 ; i < data.length ; i++)
+		{
+		if (data[i].merchant == d.merchant && data[i].type == d.type){
+		sum = data[i].HNW+data[i].SHNW+data[i].VHNW+data[i].UHNW;
+		UHNW += data[i].UHNW;
+		VHNW += data[i].VHNW;
+		HNW += data[i].HNW;
+		SHNW += data[i].SHNW;
+			}
+		}
+		var message= d.type+"<strong> Transaction:</strong> <span style='color:white'>" + sum +"</span><br>";
+		if(0 !=UHNW )
+		   message = message + "<br><strong> UHNW:</strong> <span style='color:white'>"+UHNW ;
+		if(0 !=VHNW )
+		   message = message + "<br><strong> VHNW:</strong> <span style='color:white'>"+VHNW ;
+		if(0 !=HNW )
+		   message = message + "<br><strong> HNW:</strong> <span style='color:white'>"+HNW ;
+		 if(0 !=SHNW )
+		   message = message + "<br><strong> SHNW:</strong> <span style='color:white'>"+SHNW ;
+		
+		return message;
+  });
+  
+//SVG declaration
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom+50)
+  .append("svg:g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	
+	
+//Adding Legend		
+			var legLocation1 = -290;
+			var legLocation2 = 5;
+			var legend = svg.selectAll('.city').append('g')
+						.data(unique)
+						.enter().append('g')
+						.attr('class', 'legend')
+						//.attr('transform','translate(-35,0)');
+						.attr('transform',function(d,i){
+						//legLocation1 = legLocation2 + 90 ;
+						//legLocation2 = legLocation2 - 20 ;
+						//return 'translate('+legLocation1+','legLocation2+')';
+						//console.log(legLocation2);
+						legLocation1 = legLocation1 + 90;
+						legLocation2 = legLocation2 - 20;
+						console.log(legLocation1);
+						console.log(legLocation2);
+						//return 'translate(-35,0)';
+						return 'translate('+legLocation1+','+legLocation2+')';
+						});
+
+
+				legend.append('rect')
+						.attr('x', width - 20)
+						.attr('y', function(d, i){ return i *  20;})
+						.attr('width', 10)
+						.attr('height', 10)
+						.style('fill', function(d) { 
+						return colorLegend(d);
+						});
+
+				legend.append('text')
+						.attr('id',function(d,i){return 'legend';})
+						.attr('x', width - 8)
+						.attr('y', function(d, i){ return (i *  20) + 9;})
+						.text(function(d){
+						return d;
+						})
+						.style();	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//Calling tooltip
+svg.call(tip);
+	
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+	.selectAll(".tick text")
+    .call(wrap, x0.rangeBand());
+	/*.attr("transform", function(d) {  //if merchant name count is greater than 8 the axis level will rotate 45
+				if(merchantCount > 7 )
+					return "rotate(-45)";	
+                }); */
+	
+
+//for creating stacked chart
+var merchant = svg.append("g").selectAll("g")
+	.data(data)
+	.enter()
+	.append("g")
+	.attr("transform", function(d) {
+	return "translate(" + x0(d.merchant) + ",0)";
+	})
+	.selectAll("rect")
+    .data(function(d) {
+		return d.transactiontype; })
+	.enter()
+	.append("rect")
+    .attr("width", x1.rangeBand())
+    .attr("height", function(d,i) {
+	return y(d.y0) - y(d.y1);
+	})
+    .attr("x", function(d) { return x1(d.type); })
+	.attr("y", function(d) { return y(d.y1); })
+	.style("fill", function(d, i) { 
+	if(d.type == 'Credit Card')
+	return colorCredit(d.name); 
+	if(d.type == 'Debit Card')
+	return colorDebit(d.name); 
+	if(d.type == 'Cheque')
+	return colorCheque(d.name); 
+	});
+	//.on('mouseover', tip.show)
+	//.on('mouseout', tip.hide);
+	
+	
+	//For creating a group bar chart over stacked so that we hover mouse to see the tool tip
+	svg.append("g").selectAll("g")
+    .data(dataTemp)
+	.enter()
+	.append("g")
+	.attr("transform", function(d) {return "translate(" + x0(d.merchant) + ",0)"; })
+	.selectAll("rect")
+    .data(function(d) {	return d.data_new; })
+	.enter()
+	.append("rect")
+    .attr("width", x1.rangeBand())
+    .attr("height", function(c) {return height - y(c.count);; })
+    .attr("x", function(c) { return x1(c.type); })
+    .attr("y", function(c) { return y(c.count); })
+	.style("fill", 'blue')
+	.style("opacity",0)
+	.on('mouseover', tip.show)
+	.on('mouseout', tip.hide);
+	
+	
+
+</script>
+
+</body>
