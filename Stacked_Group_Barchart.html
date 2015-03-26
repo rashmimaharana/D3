@@ -1,7 +1,6 @@
 <html>
 <meta charset="utf-8">
 <style>
-
   .d3-tip {
   line-height: 1;
   font-weight: bold;
@@ -10,7 +9,6 @@
   color: #fff;
   border-radius: 2px;
 }
-
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
   box-sizing: border-box;
@@ -29,34 +27,24 @@
   top: 100%;
   left: 0;
 }
-
-
 .bar:hover {
   fill: orangered ;
 }
-
-
-
 .axis text {
   font: 10px sans-serif;
 }
-
 .axis path,
 .axis line {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
 }
-
 .x.axis path {
   display: none;
 }
-
 .legend text {
   font: 12px sans-serif;
 }
-
-
 </style>
 <body>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
@@ -172,7 +160,7 @@ var tempData=[{"merchant":"M1",
 																	 {"segm":"UHNW","count": 110},
 																	 {"segm":"SHNW","count": 60},
 																	 {"segm":"HNW","count": 50}]}]
-				},/*{"merchant":"M9",
+				},{"merchant":"M9",
 			   "values":[{"type":"Credit Card","values":[{"segm":"VHNW","count": 150},
 																	 {"segm":"UHNW","count": 180},
 																	 {"segm":"SHNW","count": 100},
@@ -186,12 +174,11 @@ var tempData=[{"merchant":"M1",
 																	 {"segm":"SHNW","count": 60},
 																	 {"segm":"HNW","count": 50}]
 																	 }]
-				}*/
+				}
 			];
 
 
 
-			
 var data = [];        //for storing the final data used for plotting
 var tempSegment=[];   //for storing segment type
 
@@ -287,10 +274,8 @@ dataTemp.forEach(function(d){
 					}); 
 
 //For drawing a virtual bar for tool tip end
-
 var color = d3.scale.ordinal()
 			  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"])
-			  //.domain(d3.keys(data[0]).filter(function(key) { return (key !== "merchant" && key !== "type" && key !== "total" && key !== "transactiontype" ); }));
 			  .domain(tempSegment);
 
 data.forEach(function(d) {
@@ -301,12 +286,9 @@ d.total = d.transactiontype[d.transactiontype.length - 1].y1;
 
 var maxdata = d3.max(data , function(d) {return d.total; }); //get the maximum value for setting the yaxis domain value
 
-//var valSeg = ['SHNW','HNW','VHNW','UHNW'];
-//var valSeg = d3.keys(data[0]).filter(function(key) { return (key !== "merchant" && key !== "type" && key !== "total" && key !== "type" && key !== "transactiontype" ); })
 
 //color used for Credit card			  
 var colorCredit=d3.scale.ordinal()
-				//.range(['#8B4513','#A26A42','#B98F71','#DCC7B8'])
 				.range(['#DCC7B8','#B98F71','#A26A42','#8B4513'])
 				.domain(tempSegment);
 
@@ -378,9 +360,6 @@ var unique = (function(){
    return newarr;
 })();
 
-console.log('unique');console.log(unique);
-
-
 var colorLeg = ['#8B4513','#556B2F','#2A2452'];
 var colorLegend = d3.scale.ordinal().range(colorLeg).domain(unique);
 
@@ -391,15 +370,9 @@ var margin = {top: 20, right: 30, bottom: 30, left: 40},
     height = 500 - margin.top - margin.bottom;
 
 var y = d3.scale.linear()
-    //.domain([0, d3.max(data, function(d) { return d3.max(d.data_new,function(f) { return f.count; });})])
 	.domain([0, maxdata])
     .range([height, 0]);
-/*
-var x0 = d3.scale.ordinal()
-    .domain(data.map(function (d) { return d.merchant; }))
-    .rangeBands([0, width], .4);
-*/
-	
+
 var x0 = d3.scale.ordinal()
     .domain(merchant)
     .rangeBands([0, width], .4);
@@ -408,10 +381,6 @@ var x1 = d3.scale.ordinal()
     .domain(unique)
     .rangeBands([0, x0.rangeBand()]);
 	
-	
-
-//var z = d3.scale.category20();
-
 var xAxis = d3.svg.axis()
     .scale(x0)
     .orient("bottom");
@@ -469,20 +438,13 @@ var svg = d3.select("body").append("svg")
 						.data(unique)
 						.enter().append('g')
 						.attr('class', 'legend')
-						//.attr('transform','translate(-35,0)');
 						.attr('transform',function(d,i){
-						//legLocation1 = legLocation2 + 90 ;
-						//legLocation2 = legLocation2 - 20 ;
-						//return 'translate('+legLocation1+','legLocation2+')';
-						//console.log(legLocation2);
 						legLocation1 = legLocation1 + 90;
 						legLocation2 = legLocation2 - 20;
 						console.log(legLocation1);
 						console.log(legLocation2);
-						//return 'translate(-35,0)';
 						return 'translate('+legLocation1+','+legLocation2+')';
 						});
-
 
 				legend.append('rect')
 						.attr('x', width - 20)
@@ -503,14 +465,6 @@ var svg = d3.select("body").append("svg")
 						.style();	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 //Calling tooltip
 svg.call(tip);
 	
@@ -524,11 +478,6 @@ svg.append("g")
     .call(xAxis)
 	.selectAll(".tick text")
     .call(wrap, x0.rangeBand());
-	/*.attr("transform", function(d) {  //if merchant name count is greater than 8 the axis level will rotate 45
-				if(merchantCount > 7 )
-					return "rotate(-45)";	
-                }); */
-	
 
 //for creating stacked chart
 var merchant = svg.append("g").selectAll("g")
@@ -580,8 +529,6 @@ var merchant = svg.append("g").selectAll("g")
 	.on('mouseover', tip.show)
 	.on('mouseout', tip.hide);
 	
-	
-
 </script>
 
 </body>
